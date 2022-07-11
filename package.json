@@ -17,5 +17,8 @@
   ],
   "author": "Dennis Hotson <dennis.hotson@gmail.com>",
   "license": "MIT",
-  "readmeFilename": "README.mkdn"
+  "readmeFilename": "README.mkdn",
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  }
 }

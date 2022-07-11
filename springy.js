@@ -75,6 +75,13 @@
 	// this.data.type
 	};
 
+	Graph.prototype.clear = function() {
+		this.edges = [];
+		this.nodeSet = [];	
+		this.nodes = [];
+		this.adjacency = [];
+	}
+
 	Graph.prototype.addNode = function(node) {
 		if (!(node.id in this.nodeSet)) {
 			this.nodes.push(node);
@@ -89,9 +96,22 @@
 	Graph.prototype.addNodes = function() {
 		// accepts variable number of arguments, where each argument
 		// is a string that becomes both node identifier and label
-		for (var i = 0; i < arguments.length; i++) {
-			var name = arguments[i];
-			var node = new Node(name, {label:name});
+		for (var i = 0; i < arguments.length; i++) {						
+			var name;
+			var color;
+			var backgroundColor;
+			var font;
+
+			if (arguments[i].constructor === String) {
+				name = arguments[i];
+			} 
+			else {
+				name = arguments[i].name;
+				color = arguments[i].color;
+				backgroundColor = arguments[i].backgroundColor;
+				font = arguments[i].font;
+			}
+			var node = new Node(name, {label:name, backgroundColor: backgroundColor, color: color, font: font});
 			this.addNode(node);
 		}
 	};
@@ -99,7 +119,7 @@
 	Graph.prototype.addEdge = function(edge) {
 		var exists = false;
 		this.edges.forEach(function(e) {
-			if (edge.id === e.id) { exists = true; }
+			if (edge.source === e.source && edge.target == e.target) { exists = true; }
 		});
 
 		if (!exists) {

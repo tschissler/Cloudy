@@ -310,14 +310,21 @@ jQuery.fn.springy = function(params) {
 			// clear background
 			ctx.clearRect(s.x - boxWidth/2, s.y - boxHeight/2, boxWidth, boxHeight);
 
-			// fill background
-			if (selected !== null && selected.node !== null && selected.node.id === node.id) {
-				ctx.fillStyle = "#FFFFE0";
-			} else if (nearest !== null && nearest.node !== null && nearest.node.id === node.id) {
-				ctx.fillStyle = "#EEEEEE";
-			} else {
-				ctx.fillStyle = "#FFFFFF";
+			if (node.data.backgroundColor !== undefined) {
+				ctx.fillStyle = node.data.backgroundColor;
 			}
+			else
+			{
+				// fill background
+				if (selected !== null && selected.node !== null && selected.node.id === node.id) {
+					ctx.fillStyle = "#FFFFE0";
+				} else if (nearest !== null && nearest.node !== null && nearest.node.id === node.id) {
+					ctx.fillStyle = "#EEEEEE";
+				} else {
+					ctx.fillStyle = "#FFFFFF";
+				}
+			}
+			
 			ctx.fillRect(s.x - boxWidth/2, s.y - boxHeight/2, boxWidth, boxHeight);
 
 			if (node.data.image == undefined) {

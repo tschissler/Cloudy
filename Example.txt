@@ -1,0 +1,36 @@
+Team collaboration
+  Communication Skills
+    Express technical ideas
+      Dojos to practice
+      Discover differences
+    Visualization techniques
+      Get trigger to visualize
+      Make people feel comfortable visualizing
+    Ask for clarity
+      Reflect on missed opportunities
+      Ask to explain back
+  Break silos
+    Knowledge sharing
+      Work should not only be done by the expert
+      Pair-Programming
+      Mob-Programming
+        Use of tools / environment
+      Allow time to become faster
+    Psychological Safety to learn new things
+      Value of learning
+        Share learnings
+  Facilitation
+    Make quite voices be heard
+    Get team agreement on collaboration
+    Spot communication flaws
+      Mirror back to discuss
+  Have a shared goal
+    Reflect on the goal frequently
+    Everyone on the team should contribute
+      Explore ways to contribute in other ways
+    Hold people accountable
+  Respect
+    Ask "What made you...?"
+    Always assume good intent
+      Assume you are seeing just a part
+    Explore environment / situation

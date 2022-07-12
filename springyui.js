@@ -141,7 +141,11 @@ jQuery.fn.springy = function(params) {
 	};
 
 	var getTextHeight = function(node) {
-		return 16;
+		if (node.data === undefined || node.data.font === undefined) {
+			return 16;
+		}
+		size = node.data.font.split(' ').find(function(element){return element.includes('px');});
+		return parseInt(size.replace('\'','',10).replace('px',''));
 		// In a more modular world, this would actually read the font size, but I think leaving it a constant is sufficient for now.
 		// If you change the font size, I'd adjust this too.
 	};

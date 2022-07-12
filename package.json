@@ -20,8 +20,5 @@
   "readmeFilename": "README.mkdn",
   "devDependencies": {
     "mocha": "^10.0.0"
-  },
-  "dependencies": {
-    "fluent-assert": "^1.1.0"
   }
 }

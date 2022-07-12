@@ -1,6 +1,6 @@
 export function parse(cloudData) {
     var inputrows = cloudData.split('\n');
-    var rootnode = {title: inputrows[0], childNodes: []};
+    var rootnode = {id: 0, title: inputrows[0], childNodes: [], references: []};
     var result;
     
     if (inputrows.length > 1) {
@@ -20,7 +20,7 @@ function parseRecursion(element, inputrows, index, level) {
             index = parseRecursion(childnode, inputrows, index, level + 1);
         }
         else if (inputrows[index].startsWith(createIndentationString(level))) {
-            childnode = {title: inputrows[index].trim(), childNodes: []};
+            childnode = {id: createGUID(), title: inputrows[index].trim(), childNodes: [], references: []};
             element.childNodes.push(childnode);
             index++;
         }
@@ -39,5 +39,15 @@ function createIndentationString(level) {
     }
     return indentation;
 }
+
+function createGUID() {
+    function random() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return random() + random() + '-' + random() + '-' + random() + '-' +
+      random() + '-' + random() + random() + random();
+  }
 
 // module.exports.parse = parse;

@@ -76,10 +76,14 @@
 	};
 
 	Graph.prototype.clear = function() {
-		this.edges = [];
-		this.nodeSet = [];	
+		this.nodeSet = {};
 		this.nodes = [];
-		this.adjacency = [];
+		this.edges = [];
+		this.adjacency = {};
+
+		this.nextNodeId = 0;
+		this.nextEdgeId = 0;
+		this.eventListeners = [];
 	}
 
 	Graph.prototype.addNode = function(node) {

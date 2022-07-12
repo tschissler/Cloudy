@@ -15,6 +15,7 @@ describe ('ParserTests', function () {
         var actual = parser.parse(input);
         assert.strictEqual(actual.title, "Node A");
         assert.strictEqual(actual.childNodes[0].title, "ChildNode A.1");
+        assert.notEqual(actual.childNodes[0].id, 0);
         assert.strictEqual(actual.childNodes[0].childNodes.length, 0);
     });
 
@@ -23,8 +24,10 @@ describe ('ParserTests', function () {
         var actual = parser.parse(input);
         assert.strictEqual(actual.title, "Node A");
         assert.strictEqual(actual.childNodes[0].title, "ChildNode A.1");
+        assert.notEqual(actual.childNodes[0].id, 0);
         assert.strictEqual(actual.childNodes[0].childNodes.length, 0);
         assert.strictEqual(actual.childNodes[1].title, "ChildNode A.2");
+        assert.notEqual(actual.childNodes[1].id, 0);
         assert.strictEqual(actual.childNodes[1].childNodes.length, 0);
     });
 
@@ -35,6 +38,7 @@ describe ('ParserTests', function () {
         assert.strictEqual(actual.childNodes[0].title, "ChildNode A.1");
         assert.strictEqual(actual.childNodes[0].childNodes.length, 1);
         assert.strictEqual(actual.childNodes[0].childNodes[0].title, "SubChildNode A.1.1");
+        assert.notEqual(actual.childNodes[0].childNodes[0].id, 0);
         assert.strictEqual(actual.childNodes[0].childNodes[0].childNodes.length, 0);
     });
 

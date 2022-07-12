@@ -97,6 +97,7 @@
   function rerenderCloud(){
     console.log("Rerendering Cloud");
     graph.clear();
+
     renderRecursive(data, true);
     addReferencesRecursive(data);
   }
@@ -115,7 +116,7 @@
       graph.addNode(newNode);
     } 
     else {
-      var newNode = new Springy.Node(dataItem.id, {label:dataItem.title, dataItem: data});
+      var newNode = new Springy.Node(dataItem.id, {label:dataItem.title, dataItem: dataItem});
       graph.addNode(newNode);
     }
     if (dataItem.childNodes){

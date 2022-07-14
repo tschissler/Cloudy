@@ -19,6 +19,7 @@
   var connMode = connectionMode.Off;
   var connectionStartNode;
   var data;
+  var renderiteration = 0;
 
   var graph = new Springy.Graph();
   // graph.addNodes('Dennis', 'Michael', 'Jessica', 'Timothy', 'Barbara')
@@ -95,6 +96,7 @@
   }
 
   function rerenderCloud(){
+    renderiteration++;
     console.log("Rerendering Cloud");
     graph.clear();
 
@@ -112,17 +114,17 @@
 
   function renderRecursive(dataItem, isRoot){
     if (isRoot) {
-      var newNode = new Springy.Node(dataItem.id, {label:dataItem.title, color: '#00A0B0', font: "32px Arial, sans-serif"});
+      var newNode = new Springy.Node(renderiteration + dataItem.id, {label:dataItem.title, color: '#00A0B0', font: "32px Arial, sans-serif"});
       graph.addNode(newNode);
     } 
     else {
-      var newNode = new Springy.Node(dataItem.id, {label:dataItem.title, dataItem: dataItem});
+      var newNode = new Springy.Node(renderiteration + dataItem.id, {label:dataItem.title, dataItem: dataItem});
       graph.addNode(newNode);
     }
     if (dataItem.childNodes){
       dataItem.childNodes.forEach(element => {
         renderRecursive(element);
-        graph.addEdges([dataItem.id, element.id, {color: '#00A0B0'}]);
+        graph.addEdges([renderiteration + dataItem.id, renderiteration + element.id, {color: '#00A0B0'}]);
       });
     }
   }
@@ -134,7 +136,7 @@
       });
     if (dataItem.references) {
       dataItem.references.forEach(element => {
-        graph.addEdges([dataItem.id, element, {color: '#00A0B0'}]);
+        graph.addEdges([renderiteration + dataItem.id, renderiteration + element, {color: '#00A0B0'}]);
       })
     }
     }

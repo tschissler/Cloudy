@@ -39,11 +39,11 @@
   //   ['Barbara', 'Timothy', {color: '#6A4A3C'}]
   // );
   $("#refresh").click(function() {
-    refreshCloud();
+    refreshCloud(false);
   });
 
   $("#rerender").click(function() {
-    rerenderCloud();
+    rerenderCloud(true);
   });
 
   $("#connect").click(function () {
@@ -51,10 +51,10 @@
   })
 
   $('#inputData').on('input',function() {
-    refreshCloud();
+    refreshCloud(false);
   });
 
-  refreshCloud();
+  refreshCloud(false);
 
   (function() {
   var canvas = document.getElementById('springydemo')
@@ -100,31 +100,48 @@
     console.log("Rerendering Cloud");
     graph.clear();
 
-    renderRecursive(data, true);
+    renderRecursive(data, true, true);
     addReferencesRecursive(data);
   }
 
-  function refreshCloud(){
+  function refreshCloud(rebuld){
     // graph = new Springy.Graph();
     var inputData = $("#inputData").val();
     data = parse(inputData);
     graph.clear();
-    renderRecursive(data, true);
+    renderRecursive(data, true, rebuld);
   }
 
-  function renderRecursive(dataItem, isRoot){
+  function renderRecursive(dataItem, isRoot, rebuild){
     if (isRoot) {
-      var newNode = new Springy.Node(renderiteration + dataItem.id, {label:dataItem.title, color: '#00A0B0', font: "32px Arial, sans-serif"});
-      graph.addNode(newNode);
+      if (rebuild) {
+        var newNode = new Springy.Node(renderiteration + dataItem.id, {label:dataItem.title, color: '#00A0B0', font: "32px Arial, sans-serif"});
+        graph.addNode(newNode);
+      }
+      else {
+        var newNode = new Springy.Node(dataItem.title, {label:dataItem.title, color: '#00A0B0', font: "32px Arial, sans-serif"});
+        graph.addNode(newNode);        
+      }
     } 
     else {
-      var newNode = new Springy.Node(renderiteration + dataItem.id, {label:dataItem.title, dataItem: dataItem});
-      graph.addNode(newNode);
+      if (rebuild) {
+        var newNode = new Springy.Node(renderiteration + dataItem.id, {label:dataItem.title, dataItem: dataItem});
+        graph.addNode(newNode);
+      }
+      else {
+        var newNode = new Springy.Node(dataItem.title, {label:dataItem.title, dataItem: dataItem});
+        graph.addNode(newNode);
+      }
     }
     if (dataItem.childNodes){
       dataItem.childNodes.forEach(element => {
-        renderRecursive(element);
-        graph.addEdges([renderiteration + dataItem.id, renderiteration + element.id, {color: '#00A0B0'}]);
+        renderRecursive(element, false, rebuild);
+        if (rebuild) {
+          graph.addEdges([renderiteration + dataItem.id, renderiteration + element.id, {color: '#00A0B0'}]);
+        }
+        else {
+          graph.addEdges([dataItem.title, element.title, {color: '#00A0B0'}]);
+        }
       });
     }
   }

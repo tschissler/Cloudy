@@ -1,6 +1,15 @@
+declare global {
+  namespace NodeJS {
+    interface Global {
+       document: Document;
+       window: Window;
+       navigator: Navigator;
+    } 
+  }
+}
 
 export default class Editor
-{    
+{       
     public keyPressEventHandler(e: KeyboardEvent) {
         if (e.key.toLowerCase() == "tab" )
         {
@@ -14,8 +23,6 @@ export default class Editor
             new Editor().changeIndention(document, currentListItem.id, !e.shiftKey);
             e.preventDefault();
         }
-
-
     }
 
     public keyUpEventHandler(e: KeyboardEvent) {
@@ -29,6 +36,19 @@ export default class Editor
 
             currentListItem.id = new Editor().createGUID();
         }
+    }
+
+    public save(doc: string) {
+        const a = globalThis.document.createElement("a");
+        a.href = "data:text/plain;charset=utf-8," + doc;
+        a.download = "cloud.html";
+        globalThis.document.body.appendChild(a);
+        a.click();
+    }
+
+    public load(content: string, container: HTMLElement) {
+        console.log("Writing content");
+        container.innerHTML = content;
     }
 
     public createGUID() {

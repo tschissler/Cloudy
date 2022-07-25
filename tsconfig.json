@@ -4,5 +4,11 @@
       "module": "ESNext",
       "sourceMap": true,
       "moduleResolution": "Node",
+      "baseUrl": ".",
+      "paths": {
+        "./node_modules/file-saver/dist/FileSaver.min.js": [
+          "node_modules/@types/file-saver/index"
+        ]
+      },
     }
   }

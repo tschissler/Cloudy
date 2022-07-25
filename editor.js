@@ -22,6 +22,17 @@ export default class Editor {
             currentListItem.id = new Editor().createGUID();
         }
     }
+    save(doc) {
+        const a = globalThis.document.createElement("a");
+        a.href = "data:text/plain;charset=utf-8," + doc;
+        a.download = "cloud.html";
+        globalThis.document.body.appendChild(a);
+        a.click();
+    }
+    load(content, container) {
+        console.log("Writing content");
+        container.innerHTML = content;
+    }
     createGUID() {
         function random() {
             return Math.floor((1 + Math.random()) * 0x10000)

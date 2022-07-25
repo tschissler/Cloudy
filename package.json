@@ -18,13 +18,17 @@
   "author": "Dennis Hotson <dennis.hotson@gmail.com>",
   "license": "MIT",
   "readmeFilename": "README.mkdn",
+  "type": "module",
   "devDependencies": {
     "@types/jquery": "^3.5.14",
+    "@types/mocha": "^9.1.1",
     "mocha": "^10.0.0",
     "typescript": "*"
   },
   "dependencies": {
+    "chai": "^4.3.6",
     "devextreme": "^22.1.3",
-    "devextreme-quill": "^1.5.16"
+    "devextreme-quill": "^1.5.16",
+    "jsdom": "^20.0.0"
   }
 }

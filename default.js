@@ -5,22 +5,22 @@
 //     height: 800,
 //     value: "This is <b>HtmlEditor</b>.<br/>Select text and use a toolbar item."
 // });
-$(() => {
-    const editor = $('.html-editor').dxHtmlEditor({
-        height: 725,
-        value: "<ul><li id=4>abc</li></ul>",
-        imageUpload: {
-            tabs: ['file', 'url'],
-            fileUploadMode: 'base64',
-        },
-        toolbar: {
-            items: [
-                'undo', 'redo', 'separator',
-            ],
-        },
-        mediaResizing: {
-            enabled: false,
-        },
-    }).dxHtmlEditor('instance');
-});
+// $(() => {
+//     const editor = $('.html-editor').dxHtmlEditor({
+//       height: 725,
+//       value: "<ul><li id=4>abc</li></ul>",
+//       imageUpload: {
+//         tabs: ['file', 'url'],
+//         fileUploadMode: 'base64',
+//       },
+//       toolbar: {
+//         items: [
+//           'undo', 'redo', 'separator',
+//         ],
+//       },
+//       mediaResizing: {
+//         enabled: false,
+//       },
+//     }).dxHtmlEditor('instance');
+//   });
 //# sourceMappingURL=default.js.map

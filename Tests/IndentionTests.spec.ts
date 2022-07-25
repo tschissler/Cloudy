@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
-import Editor from '../editor.js';
+import Editor from '../ts/editor.js/index.js';
 
 declare global {
   namespace NodeJS {

@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import Editor from '../ts/editor.js';
 describe('ChangeListLevelsTests', () => {
     before(function () {
-        return JSDOM.fromFile('index.html')
+        return JSDOM.fromFile('./tests/index.html')
             .then((dom) => {
             globalThis.window = dom.window;
             globalThis.document = window.document;
@@ -112,6 +112,14 @@ describe('ChangeListLevelsTests', () => {
             expect(document.getElementById("editor").innerHTML).to.equal(expectedHTML);
         });
         it('Unindent last subnode', function () {
+            const editor = new Editor();
+            const startHTML = '<ul><li id="1">Test1</li><ul><li id="1.1">Test1.1</li><li id="1.2">Test1.2</li><li id="1.3">Test1.3</li></ul></ul>';
+            const expectedHTML = '<ul><li id="1">Test1</li><ul><li id="1.1">Test1.1</li><li id="1.2">Test1.2</li></ul><li id="1.3">Test1.3</li></ul>';
+            document.getElementById("editor").innerHTML = startHTML;
+            editor.changeIndention(document, "1.3", false);
+            expect(document.getElementById("editor").innerHTML).to.equal(expectedHTML);
+        });
+        it('Unindent last subnode with sibling', function () {
             const editor = new Editor();
             const startHTML = '<ul><li id="1">Test1</li><ul><li id="1.1">Test1.1</li><li id="1.2">Test1.2</li><li id="1.3">Test1.3</li></ul><li id="3">Test2</li></ul>';
             const expectedHTML = '<ul><li id="1">Test1</li><ul><li id="1.1">Test1.1</li><li id="1.2">Test1.2</li></ul><li id="1.3">Test1.3</li><li id="3">Test2</li></ul>';

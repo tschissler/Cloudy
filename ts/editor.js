@@ -8,6 +8,7 @@ export default class Editor {
                 currentListItem = currentListItem.parentNode;
             }
             new Editor().changeIndention(document, currentListItem.id, !e.shiftKey);
+            document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
             e.preventDefault();
         }
     }
@@ -32,6 +33,7 @@ export default class Editor {
     load(content, container) {
         console.log("Writing content");
         container.innerHTML = content;
+        document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
     }
     createGUID() {
         function random() {
@@ -103,7 +105,7 @@ export default class Editor {
                             nextNode.before(node);
                         }
                         else {
-                            itemList.previousSibling.after(node);
+                            itemList.previousSibling.parentNode.appendChild(node);
                         }
                         if (!itemList.hasChildNodes()) {
                             parentList.removeChild(itemList);

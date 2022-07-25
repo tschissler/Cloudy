@@ -10,19 +10,87 @@
         <script src="js/springyui.js"></script>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+        <link rel="stylesheet" type="text/css" href="/css/site.css" />
 
+        <script type="module">
+              $('#CloudTextModel').on('input',function() {
+                    refreshCloud();
+                });
+            var graph = new Springy.Graph();
+            jQuery(function(){
+                var springy = jQuery('#cloudCanvas').springy({
+                graph: graph,
+                // nodeSelected: selectedNode
+                });
+            });
+
+              (function() {
+  var canvas = document.getElementById('cloudCanvas')
+  window.addEventListener('resize', resizeCanvas, false)
+  resizeCanvas()
+
+  function resizeCanvas() {
+    canvas.width = $('#canvasDiv').width(); /* window.innerWidth or another container width */
+    canvas.height = $('#canvasDiv').height()-20;/* window.innerHeight or another container height */
+  }
+})()
+
+            refreshCloud();
+
+            function refreshCloud(){
+                var data = $("#CloudTextModel").children()[0];
+                graph.clear();
+                renderRecursive(data, true);
+            }
+
+            function renderRecursive(dataItem, isRoot){
+                if (dataItem.children) {
+                    for (var i = 0; i < dataItem.children.length; i++) {
+                        var child = dataItem.children[i];
+                        if (child.nodeName == "LI") {
+                            if (isRoot) {
+                                var newNode = new Springy.Node(child.id, {label: child.innerText, color: '#00A0B0', font: "32px Arial, sans-serif"});
+                                graph.addNode(newNode);
+                            }
+                            else {
+                                var newNode = new Springy.Node(child.id, {label:child.innerText, dataItem: dataItem});
+                                graph.addNode(newNode);
+                                var parent = child.parentElement.previousSibling;
+                                while (parent.nodeName != "LI" && parent.previousSibling != null) {
+                                    parent = parent.previousSibling;
+                                }
+                                graph.addEdges([parent.id, child.id, {color: '#00A0B0'}]);
+                            }
+                        }
+                        if (child.nodeName == "UL") {
+                            renderRecursive(child, false);
+                        }
+                    };
+                }
+            }
+
+            (function() {
+                var canvas = document.getElementById('cloudCanvas')
+                window.addEventListener('resize', resizeCanvas, false)
+                resizeCanvas()
+
+                function resizeCanvas() {
+                    canvas.width = $('#canvasDiv').width(); /* window.innerWidth or another container width */
+                    canvas.height = $('#canvasDiv').height();/* window.innerHeight or another container height */
+                }
+                })()
+        </script>
         <!-- <script src="editor.js" type="module"></script> -->
     </head>
     <body>
-        <div class="Container-flow">
-            <div class="row canvas">
-                <div class="col-9" id="canvasDiv">
+        <div class="Container-flow fullHeigh">
+            <div class="row fullHeigh">
+                <div class="col-9 fullHeigh" id="canvasDiv">
                     <canvas id="cloudCanvas" width="800px" height="800px"></canvas>
                 </div>
                 <div class="col-3">
                     <div id="CloudTextModel" contenteditable="true">  
-                        <ul><li id="1">Test1</li><ul><li id="1.1">Test1.1</li><li id="1.2">Test1.2</li><li id="1.3">Test1.3</li></ul><li id="3">Test2</li></ul>          
+                        <ul><li id="1">Test1</li><ul><li id="1.1">Test1.1</li><li id="1.2">Test1.2</li><li id="1.3">Test1.3</li></ul></ul>          
                     </div>
                     <button id="btnSave">Save</button>
                     <input id="fileField" type="file" />  

@@ -8,8 +8,7 @@ declare global {
   }
 }
 
-export default class Editor
-{       
+export default class Editor {       
     public keyPressEventHandler(e: KeyboardEvent) {
         if (e.key.toLowerCase() == "tab" )
         {
@@ -21,6 +20,7 @@ export default class Editor
             }
 
             new Editor().changeIndention(document, currentListItem.id, !e.shiftKey);
+            document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
             e.preventDefault();
         }
     }
@@ -49,6 +49,7 @@ export default class Editor
     public load(content: string, container: HTMLElement) {
         console.log("Writing content");
         container.innerHTML = content;
+        document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
     }
 
     public createGUID() {
@@ -126,7 +127,7 @@ export default class Editor
                             nextNode.before(node); 
                         }
                         else {
-                            itemList.previousSibling.after(node);
+                            itemList.previousSibling.parentNode.appendChild(node);
                         }
                         if (!itemList.hasChildNodes()) {
                             parentList.removeChild(itemList);

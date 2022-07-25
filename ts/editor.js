@@ -31,9 +31,20 @@ export default class Editor {
         a.click();
     }
     load(content, container) {
-        console.log("Writing content");
+        console.log("Reading content from file");
         container.innerHTML = content;
+        this.updateReferencesRecursive(container);
         document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
+    }
+    updateReferencesRecursive(node) {
+        if (node.children != null) {
+            Array.from(node.children).forEach(element => {
+                if (element.slot != "") {
+                    element.references = element.slot.split(",");
+                }
+                this.updateReferencesRecursive(element);
+            });
+        }
     }
     createGUID() {
         function random() {

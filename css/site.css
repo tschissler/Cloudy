@@ -1,3 +1,18 @@
-.fullHeigh {
-  height: 100%;  
+:root {
+  --toolbarHeight: 40px;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: aliceblue;
+}
+
+.row.header {
+  height: var(--toolbarHeight);
+}
+
+.row.content {
+  background-color: white;
+  height: calc(100vh - var(--toolbarHeight));
 }

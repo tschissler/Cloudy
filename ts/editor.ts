@@ -8,6 +8,10 @@ declare global {
   }
 }
 
+interface CloudNode extends HTMLElement {
+    references : Array<string>;
+}
+
 export default class Editor {       
     public keyPressEventHandler(e: KeyboardEvent) {
         if (e.key.toLowerCase() == "tab" )
@@ -47,9 +51,23 @@ export default class Editor {
     }
 
     public load(content: string, container: HTMLElement) {
-        console.log("Writing content");
+        console.log("Reading content from file");
+
         container.innerHTML = content;
+        this.updateReferencesRecursive(<CloudNode>container);
+        
         document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
+    }
+
+    private updateReferencesRecursive(node: CloudNode) {
+        if (node.children != null) {
+            Array.from(node.children).forEach(element => {
+                if (element.slot != "") {
+                    (<CloudNode>element).references = element.slot.split(",");
+                }
+                this.updateReferencesRecursive(element as CloudNode);
+            });
+        }
     }
 
     public createGUID() {

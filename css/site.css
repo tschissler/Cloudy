@@ -16,3 +16,16 @@ body {
   background-color: white;
   height: calc(100vh - var(--toolbarHeight));
 }
+
+.inputContainer {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - var(--toolbarHeight));
+}
+
+.canvasContainer {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - var(--toolbarHeight));
+  max-width: 75vw;
+}

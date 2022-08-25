@@ -6,6 +6,7 @@ body {
   height: 100%;
   margin: 0;
   background-color: aliceblue;
+  overflow-x: hidden;
 }
 
 .row.header {
@@ -18,14 +19,34 @@ body {
 }
 
 .inputContainer {
+  position: absolute;
+  left: 75%;
   overflow-x: hidden;
   overflow-y: auto;
   max-height: calc(100vh - var(--toolbarHeight));
+  background-color: lightgrey;
+  height: 100%;
+  min-height: calc(100vh - var(--toolbarHeight));
+  width: 25vw;
 }
 
+#CloudTextModel {
+  width: 25vw;
+  min-width: 25vw;
+}
 .canvasContainer {
   overflow-x: auto;
   overflow-y: auto;
   max-height: calc(100vh - var(--toolbarHeight));
-  max-width: 75vw;
+  /* max-width: 75vw; */
+  width: 100%;
+}
+
+.minimizeButton {
+  position: absolute;
+  top: var(--toolbarHeight);
+  right: 25vw;
+  width: var(--toolbarHeight);
+  height: var(--toolbarHeight);
+  border: 1px gray solid;
 }

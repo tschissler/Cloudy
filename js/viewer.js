@@ -1,5 +1,7 @@
 var fontsize = 16;
 var zoom = 1;
+var springy;
+var previoslySelectedTreeNode;
 
 $("#CloudTextModel").on("input", function () {
   refreshCloud();
@@ -26,6 +28,12 @@ $("#btnZoomOut").on("click", function () {
   zoom -= 0.5;
   resizeCanvas();
 });
+// $("#btnTest").on("click", function () {
+//   graph.selectedNode = { node: graph.nodes[0] };
+//   $("springy").selected = { node: graph.nodes[0] };
+
+//   springy.renderer.start();
+// });
 
 
 const connectionMode = {
@@ -40,28 +48,37 @@ var connectionStartNode;
 
 var graph = new Springy.Graph();
 jQuery(function () {
-  var springy = jQuery("#cloudCanvas").springy({
+  springy = jQuery("#cloudCanvas").springy({
     graph: graph,
     nodeSelected: selectedNode,
+    stiffness: 100,
+    repulsion: 800,
+    minEnergyThreshold: 0.0001,
+    damping: 0.7,
   });
 });
 
 (function () {
-   window.addEventListener("resize", resizeCanvas, false);
+  window.addEventListener("resize", resizeCanvas, false);
   resizeCanvas();
-
-
 })();
 
-function resizeCanvas() {
-    var canvas = document.getElementById("cloudCanvas");
-    canvas.width =
-      $("#canvasDiv").width() *
-      zoom; /* window.innerWidth or another container width */
-    canvas.height =
-      $("#canvasDiv").height() *
-      zoom; /* window.innerHeight or another container height */
+function resizeCanvas(width) {
+  var canvas = document.getElementById("cloudCanvas");
+  if (width == null) {
+  canvas.width =
+    $("#canvasDiv").width() *
+    zoom; /* window.innerWidth or another container width */
   }
+  else {
+    canvas.width = window.innerWidth;
+  }
+  canvas.height =
+    $("#canvasDiv").height() *
+    zoom; /* window.innerHeight or another container height */
+
+    console.log("Resized canvas to " + canvas.width + "x" + canvas.height);
+}
 
 function startConnect() {
   connMode = connectionMode.SelectStartPoint;
@@ -72,7 +89,8 @@ function startConnect() {
 function selectedNode(node) {
   console.log("Node " + node.data.label + " selected");
   if (connMode === connectionMode.SelectEndPoint) {
-    document.getElementById("messageField").innerText = "Endpoint selected, drawing connection";
+    document.getElementById("messageField").innerText =
+      "Endpoint selected, drawing connection";
     connMode = connectionMode.Off;
     graph.newEdge(connectionStartNode, node, { color: "#00A0F0" });
     connectionStartNode.data.dataItem.references.push(node.data.dataItem.id);
@@ -81,9 +99,20 @@ function selectedNode(node) {
   }
 
   if (connMode === connectionMode.SelectStartPoint) {
-    document.getElementById("messageField").innerText ="Startpoint selected. Now select the endpoint";
+    document.getElementById("messageField").innerText =
+      "Startpoint selected. Now select the endpoint";
     connectionStartNode = node;
     connMode = connectionMode.SelectEndPoint;
+  }
+
+  if (connMode == connectionMode.Off) {
+    if (previoslySelectedTreeNode != null) {
+      previoslySelectedTreeNode.style.backgroundColor = "white";
+    }
+    const selectedTreeNode = document.getElementById(node.id);
+    selectedTreeNode.style.backgroundColor = "#ffffe0";
+    selectedTreeNode.scrollIntoView();
+    previoslySelectedTreeNode = selectedTreeNode;
   }
 }
 
@@ -109,9 +138,9 @@ function renderRecursive(dataItem, isRoot) {
           });
           graph.addNode(newNode);
         } else {
-            if (child.references == null) {
+          if (child.references == null) {
             child.references = [];
-            }
+          }
           var newNode = new Springy.Node(child.id, {
             label: child.innerText,
             font: fontsize + "px Arial, sans-serif",
@@ -133,18 +162,17 @@ function renderRecursive(dataItem, isRoot) {
 }
 
 function renderReferencesRecursive(dataItem) {
-    if (dataItem.children) {
-        for (var i = 0; i < dataItem.children.length; i++) {
-            var child = dataItem.children[i];
-            if (child.references != null) {
-                child.references.forEach(element => {
-                graph.addEdges([child.id, element, { color: "#00A0F0" }]);
-                });
-            
-            }
-            renderReferencesRecursive(child);
-        }
+  if (dataItem.children) {
+    for (var i = 0; i < dataItem.children.length; i++) {
+      var child = dataItem.children[i];
+      if (child.references != null) {
+        child.references.forEach((element) => {
+          graph.addEdges([child.id, element, { color: "#00A0F0" }]);
+        });
+      }
+      renderReferencesRecursive(child);
     }
+  }
 }
 
 (function () {

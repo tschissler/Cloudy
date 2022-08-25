@@ -10,37 +10,86 @@
     <script src="js/springy.js"></script>
     <script src="js/springyui.js"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="/css/site.css" />
 
     <script type="module" src="/js/viewer.js"></script>
 </head>
 
 <body>
+    <!-- Modals -->
+    <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="fileName">Filename:</label>
+                    <input class="form-control" type="text" id="fileName" value="Cloud.html"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnSave" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade" id="loadModal" tabindex="-1" aria-labelledby="loadModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loadModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" id="fileField" type="file" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" id="btnLoad" class="btn btn-primary">Load file</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Content -->
     <div class="Container-fluid h-100">
         <div class="row header">
             <div class="col">
                 <button class="btn btn-primary" id="btnConnect">Connect</button>
-                <button class="btn btn-primary" id="btnSave">Save</button>
-                <button class="btn btn-primary" id="btnLoad">Load</button>
+                <button class="btn btn-primary" id="btnSaveModal" data-bs-toggle="modal"
+                    data-bs-target="#saveModal">Save</button>
+                <button class="btn btn-primary" id="btnLoadModal" data-bs-toggle="modal"
+                    data-bs-target="#loadModal">Load</button>
                 <button class="btn btn-primary" id="btnFontSmaller">Smaller</button>
                 <button class="btn btn-primary" id="btnFontBigger">Bigger</button>
                 <button class="btn btn-primary" id="btnZoomIn">Zoom+</button>
                 <button class="btn btn-primary" id="btnZoomOut">Zoom-</button>
-            </div>
-            <div class="col">
-                <input class="form-control" id="fileField" type="file" />
+                <button class="btn btn-primary" id="btnTest">Test</button>
             </div>
             <div class="col">
                 <div id="messageField"></div>
             </div>
         </div>
         <div class="row content">
-            <div class="col-9 h-100 canvasContainer" id="canvasDiv">
+            <div class="col-9 h-100 " id="canvasDiv">
                 <canvas id="cloudCanvas" width="800px" height="500px"></canvas>
+                <!-- <div class="minimizeButton">
+                    <button class="btn" id="btnMinimize" data-bs-toggle="collapse" data-bs-target="#inputContainer"
+                        aria-expanded="true" aria-controls="inputContainer">
+                        >>
+                    </button>
+                </div> -->
             </div>
-            <div class="col-3 inputContainer">
+            <!-- collapse collapse-horizontal -->
+            <div class="col-3 inputContainer" id="inputContainer">
                 <div id="CloudTextModel" contenteditable="true">
                     <ul>
                         <li id="1">Test1</li>
@@ -63,6 +112,7 @@
     document.getElementById('CloudTextModel').addEventListener("keyup", editor.keyUpEventHandler.bind(this));
     document.getElementById('btnSave').addEventListener("click", () => { editor.save(document.getElementById('CloudTextModel').innerHTML) }, false);
     document.getElementById('fileField').addEventListener("change", function () { console.log("Reading File..."); var file = this.files[0]; reader.readAsText(file); });
+    // document.getElementById('btnLoad').addEventListener("click", function () { console.log("Reading File..."); var file = this.files[0]; reader.readAsText(file); });
     reader.onload = function (e) { editor.load(e.target.result, document.getElementById('CloudTextModel')) };
 </script>
 

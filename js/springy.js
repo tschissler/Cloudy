@@ -334,7 +334,6 @@
 		}, this);
 	};
 
-
 	Graph.prototype.addGraphListener = function(obj) {
 		this.eventListeners.push(obj);
 	};
@@ -465,7 +464,6 @@
 			point.applyForce(direction.multiply(this.repulsion / 50.0));
 		});
 	};
-
 
 	Layout.ForceDirected.prototype.updateVelocity = function(timestep) {
 		this.eachNode(function(node, point) {

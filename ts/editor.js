@@ -73,6 +73,7 @@ export default class Editor {
   }
   changeIndention(document, nodeId, indent) {
     var skipBackMove = false;
+    var anchoroffset = document.getSelection().anchorOffset;
     console.log("Changing indention of node " + nodeId);
     const node = document.getElementById(nodeId);
     var newList;
@@ -144,10 +145,19 @@ export default class Editor {
     }
 
     var selection = document.getSelection();
+    console.log(skipBackMove + " - " + anchoroffset);
     if (!skipBackMove) {
+      anchoroffset++;
       selection.modify("move", "backward", "character");
     }
-    selection.modify("move", "forward", "character");
+    if (anchoroffset > 0) {
+      for (var i = 0; i < anchoroffset; i++) {
+        selection.modify("move", "forward", "character");
+      }
+    } else {
+      selection.modify("move", "backward", "character");
+      selection.modify("move", "forward", "character");
+    }
   }
 }
 //# sourceMappingURL=editor.js.map

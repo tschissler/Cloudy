@@ -9,7 +9,7 @@
             "type": "pwa-msedge",
             "request": "launch",
             "name": "Open demo-simple.html",
-            "url": "http://localhost:5500/default.html",
+            "url": "http://localhost:5500/index.html",
         }
     ]
 }

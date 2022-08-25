@@ -107,7 +107,7 @@ function selectedNode(node) {
 
   if (connMode == connectionMode.Off) {
     if (previoslySelectedTreeNode != null) {
-      previoslySelectedTreeNode.style.backgroundColor = "white";
+      previoslySelectedTreeNode.style.backgroundColor = "rgb(240, 242, 255)";
     }
     const selectedTreeNode = document.getElementById(node.id);
     selectedTreeNode.style.backgroundColor = "#ffffe0";

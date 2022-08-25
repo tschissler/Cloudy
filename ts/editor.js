@@ -2,7 +2,9 @@ export default class Editor {
   keyPressEventHandler(e) {
     if (e.key.toLowerCase() == "tab") {
       var selection = document.getSelection();
+      console.log(selection);
       var range = selection.getRangeAt(0);
+      console.log(range);
       var currentListItem = range.startContainer;
       if (currentListItem.nodeName.toLowerCase() == "#text") {
         currentListItem = currentListItem.parentNode;
@@ -28,27 +30,15 @@ export default class Editor {
   save(doc) {
     const a = globalThis.document.createElement("a");
     a.href = "data:text/plain;charset=utf-8," + doc;
-    var fileName = "Cloud.html";
-    if (document.getElementById("fileName").value != "") {
-      fileName = document.getElementById("fileName").value;
-    }
-    a.download = fileName;
+    a.download = "cloud.html";
     globalThis.document.body.appendChild(a);
     a.click();
-    globalThis.document.body.removeChild(a);
-    var saveModal =
-      bootstrap.Modal.getInstance(document.getElementById("saveModal"));
-    saveModal.toggle();
   }
   load(content, container) {
     console.log("Reading content from file");
     container.innerHTML = content;
     this.updateReferencesRecursive(container);
     document.getElementById("CloudTextModel").dispatchEvent(new Event("input"));
-    var loadModal = bootstrap.Modal.getInstance(
-        document.getElementById("loadModal")
-    );
-    loadModal.toggle();
   }
   updateReferencesRecursive(node) {
     if (node.children != null) {
@@ -82,6 +72,8 @@ export default class Editor {
     );
   }
   changeIndention(document, nodeId, indent) {
+    var skipBackMove = false;
+    console.log("Changing indention of node " + nodeId);
     const node = document.getElementById(nodeId);
     var newList;
     //const parent = node.parentElement;
@@ -139,6 +131,7 @@ export default class Editor {
             const nextNode = itemList.nextSibling;
             if (nextNode != null) {
               nextNode.before(node);
+              skipBackMove = true;
             } else {
               itemList.previousSibling.parentNode.appendChild(node);
             }
@@ -149,6 +142,12 @@ export default class Editor {
         }
       }
     }
+
+    var selection = document.getSelection();
+    if (!skipBackMove) {
+      selection.modify("move", "backward", "character");
+    }
+    selection.modify("move", "forward", "character");
   }
 }
 //# sourceMappingURL=editor.js.map

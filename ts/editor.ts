@@ -12,7 +12,7 @@ interface CloudNode extends HTMLElement {
     references : Array<string>;
 }
 
-export default class Editor {       
+export default class Editor {        
     public keyPressEventHandler(e: KeyboardEvent) {
         if (e.key.toLowerCase() == "tab" )
         {

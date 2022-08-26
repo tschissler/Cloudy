@@ -26,12 +26,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="saveModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="saveModalLabel">Save Cloud to a local file</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <label for="fileName">Filename:</label>
-                    <input class="form-control" type="text" id="fileName" value="Cloud.html"/>
+                    <input class="form-control" type="text" id="fileName" value="Cloud.html" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -41,23 +41,44 @@
         </div>
     </div>
 
-        <div class="modal fade" id="loadModal" tabindex="-1" aria-labelledby="loadModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loadModalLabel">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input class="form-control" id="fileField" type="file" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <!-- <button type="button" id="btnLoad" class="btn btn-primary">Load file</button> -->
-                    </div>
+    <div class="modal fade" id="loadModal" tabindex="-1" aria-labelledby="loadModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loadModalLabel">Load cloud from local file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="fileField" type="file" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <!-- <button type="button" id="btnLoad" class="btn btn-primary">Load file</button> -->
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="unsavedChangesModal" tabindex="-1" aria-labelledby="unsavedChangesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unsavedChangesModalLabel">Unsaved changes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="fileField" type="file" />
+                </div>
+                <div class="modal-footer">
+                    You have unsaved changes. Are you sure you want to leave this page without saving?
+                    <button type="button" id="btnUnsavedChangesCancel" class="btn btn-primary">Cancel</button>
+                    <button type="button" id="btnUnsavedChangesDiscard" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Leave and Discard Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Navigation -->
     <div class="Container-fluid h-100">
@@ -117,6 +138,13 @@
     document.getElementById('btnSave').addEventListener("click", () => { editor.save(document.getElementById('CloudTextModel').innerHTML) }, false);
     document.getElementById('fileField').addEventListener("change", function () { console.log("Reading File..."); var file = this.files[0]; reader.readAsText(file); });
     // document.getElementById('btnLoad').addEventListener("click", function () { console.log("Reading File..."); var file = this.files[0]; reader.readAsText(file); });
+    // window.addEventListener('beforeunload', function () {
+    //     return 'Dialog Text Here';
+    // });
+    window.onbeforeunload = function (e) {
+        return editor.beforeUnloadEventHandler(e);
+        //return 'You have unsaved changes. Are you sure you want to leave?';
+    };
     reader.onload = function (e) { editor.load(e.target.result, document.getElementById('CloudTextModel')) };
 </script>
 

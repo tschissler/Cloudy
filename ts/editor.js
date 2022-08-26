@@ -1,4 +1,20 @@
 export default class Editor {
+  unsavedChanges = false;
+
+  beforeUnloadEventHandler(e) {
+    if (this.unsavedChanges) {
+      return "You have unsaved changes. Are you sure you want to leave?";
+    }
+    var unsavedChangesModal = new bootstrap.Modal(
+      document.getElementById("unsavedChangesModal"),
+      {
+        keyboard: false,
+      }
+    );
+    unsavedChangesModal.toggle();
+    e.preventDefault();
+    //return false;
+  }
   keyPressEventHandler(e) {
     if (e.key.toLowerCase() == "tab") {
       var selection = document.getSelection();

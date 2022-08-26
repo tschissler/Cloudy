@@ -12,7 +12,9 @@ interface CloudNode extends HTMLElement {
     references : Array<string>;
 }
 
-export default class Editor {        
+import { Modal } from 'bootstrap';
+ 
+export default class Editor {   
     public keyPressEventHandler(e: KeyboardEvent) {
         if (e.key.toLowerCase() == "tab" )
         {
@@ -45,9 +47,17 @@ export default class Editor {
     public save(doc: string) {
         const a = globalThis.document.createElement("a");
         a.href = "data:text/plain;charset=utf-8," + doc;
-        a.download = "cloud.html";
+        var fileName = "Cloud.html";
+        var fileNameInputFiled = document.getElementById("fileName") as HTMLInputElement;
+        if (fileNameInputFiled.value != "") {
+            fileName = fileNameInputFiled.value;
+        }
+        a.download = fileName;
         globalThis.document.body.appendChild(a);
         a.click();
+        globalThis.document.body.removeChild(a);
+        var saveModal = new Modal(document.getElementById("saveModal"));
+        saveModal.show();
     }
 
     public load(content: string, container: HTMLElement) {
@@ -57,6 +67,8 @@ export default class Editor {
         this.updateReferencesRecursive(<CloudNode>container);
         
         document.getElementById('CloudTextModel').dispatchEvent(new Event('input'));
+        var loadModal = new Modal(document.getElementById("loadModal"));
+        loadModal.show();
     }
 
     private updateReferencesRecursive(node: CloudNode) {

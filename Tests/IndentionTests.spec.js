@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
-import Editor from '../ts/editor.js';
+import Editor from '../ts/editor.ts.bak';
 describe('ChangeListLevelsTests', () => {
     before(function () {
         return JSDOM.fromFile('./tests/index.html')

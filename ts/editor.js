@@ -1,8 +1,33 @@
 export default class Editor {
+  constructor() {
+    Editor.hasUnsavedChanges.set(false);
+  }
+  static _hasUnsavedChanges = false;
+  static hasUnsavedChanges = {
+    get: function () {
+      return this._hasUnsavedChanges;
+    },
+    set: function (value) {
+      this._hasUnsavedChanges = value;
+      console.log("hasUnsavedChanges: " + value);
+      if (value) {
+        $("#hasChangesIndicator").show();
+      } else {
+        $("#hasChangesIndicator").hide();
+      }
+    },
+  };
+  beforeUnloadEventHandler(e) {
+    if (Editor.hasUnsavedChanges.get()) {
+      return "You have unsaved changes. Are you sure you want to leave?";
+    }
+  }
   keyPressEventHandler(e) {
     if (e.key.toLowerCase() == "tab") {
       var selection = document.getSelection();
+
       var range = selection.getRangeAt(0);
+
       var currentListItem = range.startContainer;
       if (currentListItem.nodeName.toLowerCase() == "#text") {
         currentListItem = currentListItem.parentNode;
@@ -13,6 +38,7 @@ export default class Editor {
         .dispatchEvent(new Event("input"));
       e.preventDefault();
     }
+    Editor.hasUnsavedChanges.set(true);
   }
   keyUpEventHandler(e) {
     if (e.key.toLowerCase() == "enter") {
@@ -24,6 +50,7 @@ export default class Editor {
       }
       currentListItem.id = new Editor().createGUID();
     }
+    Editor.hasUnsavedChanges.set(true);
   }
   save(doc) {
     const a = globalThis.document.createElement("a");
@@ -41,6 +68,7 @@ export default class Editor {
       document.getElementById("saveModal")
     );
     saveModal.hide();
+    Editor.hasUnsavedChanges.set(false);
   }
   load(content, container) {
     console.log("Reading content from file");
@@ -51,6 +79,7 @@ export default class Editor {
       document.getElementById("loadModal")
     );
     loadModal.hide();
+    Editor.hasUnsavedChanges.set(false);
   }
   updateReferencesRecursive(node) {
     if (node.children != null) {
@@ -84,7 +113,6 @@ export default class Editor {
     );
   }
   changeIndention(document, nodeId, indent) {
-    var skipBackMove = false;
     var anchoroffset = document.getSelection().anchorOffset;
     console.log("Changing indention of node " + nodeId);
     const node = document.getElementById(nodeId);
@@ -144,7 +172,7 @@ export default class Editor {
             const nextNode = itemList.nextSibling;
             if (nextNode != null) {
               nextNode.before(node);
-              skipBackMove = true;
+              //skipBackMove = true;
             } else {
               itemList.previousSibling.parentNode.appendChild(node);
             }
@@ -156,10 +184,8 @@ export default class Editor {
       }
     }
     var selection = document.getSelection();
-    if (!skipBackMove) {
-      anchoroffset++;
-      selection.modify("move", "backward", "character");
-    }
+    anchoroffset++;
+    selection.modify("move", "backward", "character");
     if (anchoroffset > 0) {
       for (var i = 0; i < anchoroffset; i++) {
         selection.modify("move", "forward", "character");
@@ -170,4 +196,3 @@ export default class Editor {
     }
   }
 }
-//# sourceMappingURL=editor.js.map

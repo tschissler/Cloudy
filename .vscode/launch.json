@@ -8,8 +8,14 @@
         {
             "type": "pwa-msedge",
             "request": "launch",
-            "name": "Open demo-simple.html",
+            "name": "index.html",
             "url": "http://localhost:5500/index.html",
+        },
+        {
+            "type": "pwa-msedge",
+            "request": "launch",
+            "name": "tests/index.html",
+            "url": "http://localhost:5500/tests/index.html",
         }
     ]
 }

@@ -10,13 +10,16 @@ export default class Editor {
     set: function (value) {
       this._hasUnsavedChanges = value;
       console.log("hasUnsavedChanges: " + value);
-      if (value) {
-        $("#hasChangesIndicator").show();
-      } else {
-        $("#hasChangesIndicator").hide();
-      }
+      // if (value) {
+      //   $("#hasChangesIndicator").show();
+      // } else {
+      //   $("#hasChangesIndicator").hide();
+      // }
     },
   };
+  clickEventHandler(e) {
+    var currentListItem = Editor.GetListItemFromSelection();
+  }
   beforeUnloadEventHandler(e) {
     if (Editor.hasUnsavedChanges.get()) {
       return "You have unsaved changes. Are you sure you want to leave?";
@@ -24,15 +27,8 @@ export default class Editor {
   }
   keyPressEventHandler(e) {
     if (e.key.toLowerCase() == "tab") {
-      var selection = document.getSelection();
-
-      var range = selection.getRangeAt(0);
-
-      var currentListItem = range.startContainer;
-      if (currentListItem.nodeName.toLowerCase() == "#text") {
-        currentListItem = currentListItem.parentNode;
-      }
-      new Editor().changeIndention(document, currentListItem.id, !e.shiftKey);
+      var currentListItem = Editor.GetListItemFromSelection();
+      Editor.changeIndention(document, currentListItem.id, !e.shiftKey);
       document
         .getElementById("CloudTextModel")
         .dispatchEvent(new Event("input"));
@@ -40,6 +36,7 @@ export default class Editor {
     }
     Editor.hasUnsavedChanges.set(true);
   }
+
   keyUpEventHandler(e) {
     if (e.key.toLowerCase() == "enter") {
       var selection = document.getSelection();
@@ -48,10 +45,23 @@ export default class Editor {
       if (currentListItem.nodeName.toLowerCase() == "#text") {
         currentListItem = currentListItem.parentNode;
       }
-      currentListItem.id = new Editor().createGUID();
+      currentListItem.id = Editor.createGUID();
     }
     Editor.hasUnsavedChanges.set(true);
   }
+
+  static GetListItemFromSelection() {
+    var selection = document.getSelection();
+
+    var range = selection.getRangeAt(0);
+
+    var currentListItem = range.startContainer;
+    if (currentListItem.nodeName.toLowerCase() == "#text") {
+      currentListItem = currentListItem.parentNode;
+    }
+    return currentListItem;
+  }
+
   save(doc) {
     const a = globalThis.document.createElement("a");
     a.href = "data:text/plain;charset=utf-8," + doc;
@@ -91,7 +101,7 @@ export default class Editor {
       });
     }
   }
-  createGUID() {
+  static createGUID() {
     function random() {
       return Math.floor((1 + Math.random()) * 0x10000)
         .toString(16)
@@ -112,7 +122,8 @@ export default class Editor {
       random()
     );
   }
-  changeIndention(document, nodeId, indent) {
+
+  static changeIndention(document, nodeId, indent) {
     var anchoroffset = document.getSelection().anchorOffset;
     console.log("Changing indention of node " + nodeId);
     const node = document.getElementById(nodeId);
@@ -184,6 +195,7 @@ export default class Editor {
       }
     }
     var selection = document.getSelection();
+    if (selection.type == "Caret") {
     anchoroffset++;
     selection.modify("move", "backward", "character");
     if (anchoroffset > 0) {
@@ -194,5 +206,6 @@ export default class Editor {
       selection.modify("move", "backward", "character");
       selection.modify("move", "forward", "character");
     }
+  }
   }
 }

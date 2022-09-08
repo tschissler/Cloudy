@@ -10,11 +10,11 @@ export default class Editor {
     set: function (value) {
       this._hasUnsavedChanges = value;
       console.log("hasUnsavedChanges: " + value);
-      // if (value) {
-      //   $("#hasChangesIndicator").show();
-      // } else {
-      //   $("#hasChangesIndicator").hide();
-      // }
+      if (value) {
+        $("#hasChangesIndicator").show();
+      } else {
+        $("#hasChangesIndicator").hide();
+      }
     },
   };
   clickEventHandler(e) {

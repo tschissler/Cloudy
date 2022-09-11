@@ -121,8 +121,8 @@ export default class Editor {
   }
 
   static changeIndention(document, nodeId, indent) {
-    document.getElementById("CloudTextModel").innerHTML = this.cleanUpHtml(document.getElementById("CloudTextModel").innerHTML);
     var anchoroffset = document.getSelection().anchorOffset;
+    document.getElementById("CloudTextModel").innerHTML = this.cleanUpHtml(document.getElementById("CloudTextModel").innerHTML);
     console.log("Changing indention of node " + nodeId);
     const node = document.getElementById(nodeId);
     var newList;
@@ -135,7 +135,12 @@ export default class Editor {
       // ({ nextSibling, newList } = Editor.UnindentText(node, newList, document));
       Editor.unindentText(document, node);
     }
-    // var selection = document.getSelection();
+
+    var selection = document.getSelection();
+    selection.setPosition(node, 0);
+    for (var i = 0; i < anchoroffset; i++) {
+      selection.modify("move", "forward", "character");
+    }
     // if (selection.type == "Caret") {
     //   anchoroffset++;
     //   selection.modify("move", "backward", "character");
@@ -168,16 +173,16 @@ export default class Editor {
   static unindentText(document, node) {
     const parent = node.parentElement;
     if (parent.parentElement.parentElement.parentElement.nodeName.toLowerCase() != "div") {
-        const grandParent = parent.parentElement;
-        if (grandParent.nodeName.toLowerCase() == "li") {
-          grandParent.after(node);
-          if (parent.children.length == 0) {
-            parent.remove();
-          }
-        } else if (grandParent.nodeName.toLowerCase() == "ul") {
-          grandParent.after(node);
+      const grandParent = parent.parentElement;
+      if (grandParent.nodeName.toLowerCase() == "li") {
+        grandParent.after(node);
+        if (parent.children.length == 0) {
           parent.remove();
         }
+      } else if (grandParent.nodeName.toLowerCase() == "ul") {
+        grandParent.after(node);
+        parent.remove();
+      }
     }
   }
 

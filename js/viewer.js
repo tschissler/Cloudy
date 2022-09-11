@@ -35,7 +35,6 @@ $("#btnZoomOut").on("click", function () {
 //   springy.renderer.start();
 // });
 
-
 const connectionMode = {
   Off: "Off",
   SelectStartPoint: "SelectStartPoint",
@@ -66,41 +65,32 @@ jQuery(function () {
 function resizeCanvas(width) {
   var canvas = document.getElementById("cloudCanvas");
   if (width == null) {
-  canvas.width =
-    $("#canvasDiv").width() *
-    zoom; /* window.innerWidth or another container width */
-  }
-  else {
+    canvas.width = $("#canvasDiv").width() * zoom; /* window.innerWidth or another container width */
+  } else {
     canvas.width = window.innerWidth;
   }
-  canvas.height =
-    $("#canvasDiv").height() *
-    zoom; /* window.innerHeight or another container height */
+  canvas.height = $("#canvasDiv").height() * zoom; /* window.innerHeight or another container height */
 
-    console.log("Resized canvas to " + canvas.width + "x" + canvas.height);
+  console.log("Resized canvas to " + canvas.width + "x" + canvas.height);
 }
 
 function startConnect() {
   connMode = connectionMode.SelectStartPoint;
-  document.getElementById("messageField").innerText =
-    "Starting connection mode, please select start node";
+  document.getElementById("messageField").innerText = "Starting connection mode, please select start node";
 }
 
 function selectedNode(node) {
   console.log("Node " + node.data.label + " selected");
   if (connMode === connectionMode.SelectEndPoint) {
-    document.getElementById("messageField").innerText =
-      "Endpoint selected, drawing connection";
+    document.getElementById("messageField").innerText = "Endpoint selected, drawing connection";
     connMode = connectionMode.Off;
     graph.newEdge(connectionStartNode, node, { color: "#00A0F0" });
     connectionStartNode.data.dataItem.references.push(node.data.dataItem.id);
-    connectionStartNode.data.dataItem.slot =
-      connectionStartNode.data.dataItem.references.toString();
+    connectionStartNode.data.dataItem.slot = connectionStartNode.data.dataItem.references.toString();
   }
 
   if (connMode === connectionMode.SelectStartPoint) {
-    document.getElementById("messageField").innerText =
-      "Startpoint selected. Now select the endpoint";
+    document.getElementById("messageField").innerText = "Startpoint selected. Now select the endpoint";
     connectionStartNode = node;
     connMode = connectionMode.SelectEndPoint;
   }
@@ -125,14 +115,14 @@ function refreshCloud() {
   renderReferencesRecursive(data);
 }
 
-function renderRecursive(dataItem, isRoot) {
+function renderRecursive(dataItem, isRoot, parent) {
   if (dataItem.children) {
     for (var i = 0; i < dataItem.children.length; i++) {
       var child = dataItem.children[i];
       if (child.nodeName == "LI") {
         if (isRoot) {
           var newNode = new Springy.Node(child.id, {
-            label: child.innerText,
+            label: child.firstChild.nodeValue.trim(),
             color: "#00A0B0",
             font: "32px Arial, sans-serif",
           });
@@ -142,20 +132,21 @@ function renderRecursive(dataItem, isRoot) {
             child.references = [];
           }
           var newNode = new Springy.Node(child.id, {
-            label: child.innerText,
+            label: child.firstChild.nodeValue.trim(),
             font: fontsize + "px Arial, sans-serif",
             dataItem: child,
           });
           graph.addNode(newNode);
-          var parent = child.parentElement.previousSibling;
-          while (parent.nodeName != "LI" && parent.previousSibling != null) {
-            parent = parent.previousSibling;
-          }
+          // var parent = child.parentElement.previousSibling;
+          // while (parent.nodeName != "LI" && parent.previousSibling != null) {
+          //   parent = parent.previousSibling;
+          // }
           graph.addEdges([parent.id, child.id, { color: "#00A0B0" }]);
         }
+        renderRecursive(child, false, child);
       }
       if (child.nodeName == "UL") {
-        renderRecursive(child, false);
+        renderRecursive(child, false, parent);
       }
     }
   }
@@ -181,13 +172,7 @@ function renderReferencesRecursive(dataItem) {
   resizeCanvas();
 
   function resizeCanvas() {
-    canvas.width =
-      $(
-        "#canvasDiv"
-      ).width(); /* window.innerWidth or another container width */
-    canvas.height =
-      $(
-        "#canvasDiv"
-      ).height(); /* window.innerHeight or another container height */
+    canvas.width = $("#canvasDiv").width(); /* window.innerWidth or another container width */
+    canvas.height = $("#canvasDiv").height(); /* window.innerHeight or another container height */
   }
 })();

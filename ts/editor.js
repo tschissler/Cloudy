@@ -125,14 +125,10 @@ export default class Editor {
     document.getElementById("CloudTextModel").innerHTML = this.cleanUpHtml(document.getElementById("CloudTextModel").innerHTML);
     console.log("Changing indention of node " + nodeId);
     const node = document.getElementById(nodeId);
-    var newList;
-    //const parent = node.parentElement;
+
     if (indent) {
       Editor.indentText(document, node);
-      // ({ newList, nextSibling } = Editor.indentText(node, newList, document, nextSibling));
     } else {
-      // var nextSibling;
-      // ({ nextSibling, newList } = Editor.UnindentText(node, newList, document));
       Editor.unindentText(document, node);
     }
 
@@ -141,18 +137,6 @@ export default class Editor {
     for (var i = 0; i < anchoroffset; i++) {
       selection.modify("move", "forward", "character");
     }
-    // if (selection.type == "Caret") {
-    //   anchoroffset++;
-    //   selection.modify("move", "backward", "character");
-    //   if (anchoroffset > 0) {
-    //     for (var i = 0; i < anchoroffset; i++) {
-    //       selection.modify("move", "forward", "character");
-    //     }
-    //   } else {
-    //     selection.modify("move", "backward", "character");
-    //     selection.modify("move", "forward", "character");
-    //   }
-    // }
   }
 
   static indentText(document, node) {
@@ -185,77 +169,4 @@ export default class Editor {
       }
     }
   }
-
-  // static indentText(node, newList, document, nextSibling) {
-  //   const previousNode = node.previousElementSibling;
-  //   if (previousNode != null) {
-  //     if (previousNode.nodeName.toLowerCase() == "ul") {
-  //       newList = previousNode;
-  //       newList.appendChild(node);
-  //     } else if (node.nextSibling != null && node.nextSibling.nodeName.toLowerCase() == "ul") {
-  //       newList = node.nextSibling;
-  //       newList.prepend(node);
-  //     } else {
-  //       newList = document.createElement("ul");
-  //       newList.appendChild(node);
-  //       previousNode.after(newList);
-  //     }
-  //     nextSibling = node.parentNode.nextSibling;
-  //     if (nextSibling != null && nextSibling.nodeName == "UL") {
-  //       while (nextSibling.children.length > 0) {
-  //         newList.appendChild(nextSibling.children[0]);
-  //       }
-  //       // nextSibling.childNodes.forEach((element) => {
-  //       //   newList.appendChild(element);
-  //       // });
-  //       nextSibling.remove();
-  //     }
-  //   }
-  //   return { newList, nextSibling };
-  // }
-
-  // static UnindentText(node, newList, document) {
-  //   const parentNode = node.parentNode;
-  //   const parentList = parentNode.parentNode;
-  //   if (parentList.nodeName == "UL") {
-  //     if (parentList.parentNode.nodeName != "DIV") {
-  //       if (node.nextSibling != null && node.previousSibling != null) {
-  //         var nextSibling = node.nextSibling;
-  //         parentNode.after(node);
-  //         newList = document.createElement("ul");
-  //         while (nextSibling != null) {
-  //           var temp = nextSibling;
-  //           newList.appendChild(nextSibling);
-  //           nextSibling = temp.nextSibling;
-  //         }
-  //         node.after(newList);
-  //       } else {
-  //         if (node.nextSibling != null) {
-  //           const itemList = node.parentNode;
-  //           const previousNode = itemList.previousSibling;
-  //           previousNode.after(node);
-  //           if (!itemList.hasChildNodes()) {
-  //             parentList.removeChild(itemList);
-  //           }
-  //         }
-
-  //         // Last node in list
-  //         else {
-  //           const itemList = node.parentNode;
-  //           const nextNode = itemList.nextSibling;
-  //           if (nextNode != null) {
-  //             nextNode.before(node);
-  //             //skipBackMove = true;
-  //           } else {
-  //             itemList.previousSibling.parentNode.appendChild(node);
-  //           }
-  //           if (!itemList.hasChildNodes()) {
-  //             parentList.removeChild(itemList);
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return { nextSibling, newList };
-  // }
 }

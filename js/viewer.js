@@ -28,6 +28,9 @@ $("#btnZoomOut").on("click", function () {
   zoom -= 0.5;
   resizeCanvas();
 });
+$("#btnRedraw").on("click", function () {
+  redrawCloud();
+});
 // $("#btnTest").on("click", function () {
 //   graph.selectedNode = { node: graph.nodes[0] };
 //   $("springy").selected = { node: graph.nodes[0] };
@@ -52,7 +55,7 @@ jQuery(function () {
     nodeSelected: selectedNode,
     stiffness: 100,
     repulsion: 800,
-    minEnergyThreshold: 0.0001,
+    minEnergyThreshold: 0.001,
     damping: 0.7,
   });
 });
@@ -97,7 +100,7 @@ function selectedNode(node) {
 
   if (connMode == connectionMode.Off) {
     if (previoslySelectedTreeNode != null) {
-      previoslySelectedTreeNode.style.backgroundColor = "rgb(240, 242, 255)";
+      previoslySelectedTreeNode.style.backgroundColor = "transparent";
     }
     const selectedTreeNode = document.getElementById(node.id);
     selectedTreeNode.style.backgroundColor = "#ffffe0";
@@ -107,6 +110,27 @@ function selectedNode(node) {
 }
 
 refreshCloud();
+
+function redrawCloud() {
+  console.log("Redrawing cloud");
+  graph = new Springy.Graph();
+  document.getElementById("cloudCanvas").remove();
+  var canvas = document.createElement("canvas");
+  canvas.id = "cloudCanvas";
+  document.getElementById("canvasDiv").appendChild(canvas);
+  jQuery(function () {
+    springy = jQuery("#cloudCanvas").springy({
+      graph: graph,
+      nodeSelected: selectedNode,
+      stiffness: 100,
+      repulsion: 800,
+      minEnergyThreshold: 0.001,
+      damping: 0.7,
+    });
+  });
+  resizeCanvas();
+  refreshCloud();
+}
 
 function refreshCloud() {
   var data = $("#CloudTextModel").children()[0];
@@ -131,8 +155,12 @@ function renderRecursive(dataItem, isRoot, parent) {
           if (child.references == null) {
             child.references = [];
           }
+          var label = "";
+          if (child.firstChild.nodeValue != null) {
+            label = child.firstChild.nodeValue.trim();
+          }
           var newNode = new Springy.Node(child.id, {
-            label: child.firstChild.nodeValue.trim(),
+            label: label,
             font: fontsize + "px Arial, sans-serif",
             dataItem: child,
           });

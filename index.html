@@ -148,7 +148,7 @@
     document.getElementById('CloudTextModel').addEventListener("keydown", editor.keyPressEventHandler.bind(this));
     document.getElementById('CloudTextModel').addEventListener("keyup", editor.keyUpEventHandler.bind(this));
     document.getElementById('CloudTextModel').addEventListener("click", editor.clickEventHandler.bind(this));
-    document.getElementById('btnSave').addEventListener("click", () => { editor.save(document.getElementById('CloudTextModel').innerHTML) }, false);
+    document.getElementById('btnSave').addEventListener("click", () => { document.getElementById("CloudTextModel").querySelectorAll("[style]").forEach((el) => el.removeAttribute("style")); editor.save(document.getElementById('CloudTextModel').innerHTML) }, false);
     document.getElementById('fileField').addEventListener("change", function () { console.log("Reading File..."); var file = this.files[0]; reader.readAsText(file); });
     // document.getElementById('btnLoad').addEventListener("click", function () { console.log("Reading File..."); var file = this.files[0]; reader.readAsText(file); });
     // window.addEventListener('beforeunload', function () {
